@@ -3,15 +3,15 @@
 """Easy Dojo
 
 Usage:
-  easydojo.py create <name> [--config=<config_file>]
-  easydojo.py watch <name> [--config=<config_file>]
+  easydojo.py create <name>
+  easydojo.py watch <name> [--handler=<handle>]
   easydojo.py (-h | --help)
   easydojo.py --version
 
 Options:
+  --handler=<handle>     Handler used on watch command
   -h --help     Show this screen.
   --version     Show version.
-  --config=<config_file>  Coding dojo configuration
 
 """
 from docopt import docopt
@@ -43,7 +43,6 @@ class DojoCommand(object):
         self.config = config
         self.command = command
         self.name = config['name']
-        self.config_file = config['config_file']
 
     def run(self):
         print('[{0}] Executing {1}...'.format(self.name, self.command))
@@ -53,7 +52,7 @@ class DojoCommand(object):
     def make(arguments):
         config = {
             'name': arguments['<name>'],
-            "config_file": arguments['--config'],
+            'handler': arguments['--handler'],
         }
         if arguments['create']:
             return CreateCommand('create', config)
@@ -77,35 +76,18 @@ class CreateCommand(DojoCommand):
         open(os.path.join(name, 'test_{name}.py'.format(name=name)), 'w').close()
 
 
-class DojoEventHandler(FileSystemEventHandler):
-
-    def __init__(self, name, *args, **kwargs):
-        self.name = name
-        super(FileSystemEventHandler, self).__init__(*args, **kwargs)
-
-    def on_modified(self, event):
-        name = slugify(self.name)
-        filename = os.path.basename(event.src_path)
-        if filename.endswith('%s.py' % name):
-            puts('Modified file {name}'.format(name=filename))
-            puts('Running tests...')
-            cmd = ['python', '-m', 'unittest', 'discover', name, 'test_{name}.py'.format(name=name)]
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            return_code = proc.wait()
-            with indent(2):
-                puts(proc.stdout.read())
-                puts(proc.stderr.read())
-                if return_code:
-                    puts(colored.red('Error test!'))
-                else:
-                    puts(colored.green('Ok test!'))
-
-
 class WatchCommand(DojoCommand):
 
     def run(self):
         path = slugify(self.name)
-        event_handler = DojoEventHandler(name=self.name)
+        handler = ConsoleHandler
+        if self.config['handler']:
+            try:
+                handler = globals()['{handler}Handler'.format(handler=self.config['handler'])]
+            except KeyError:
+                puts(colored.red('Handler "{0}" not found!'.format(self.config['handler'])))
+                puts('Running with Console handler...')
+        event_handler = handler(name=self.name)
         observer = Observer()
         observer.schedule(event_handler, path, recursive=True)
         observer.start()
@@ -115,6 +97,64 @@ class WatchCommand(DojoCommand):
         except KeyboardInterrupt:
             observer.stop()
         observer.join()
+
+
+class DojoEventHandler(FileSystemEventHandler):
+
+    def __init__(self, name, *args, **kwargs):
+        self.name = name
+        super(FileSystemEventHandler, self).__init__(*args, **kwargs)
+
+    def on_modified(self, event):
+        name = slugify(self.name)
+        filename = os.path.basename(event.src_path)
+        valid = False
+        if filename.endswith('%s.py' % name):
+            valid = True
+            puts('Modified file {name}'.format(name=filename))
+            puts('Running tests...')
+            cmd = ['python', '-m', 'unittest', 'discover', name, 'test_{name}.py'.format(name=name)]
+            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            return_code = proc.wait()
+            return valid, return_code, proc
+        else:
+            return valid, 0, None
+
+
+class ConsoleHandler(DojoEventHandler):
+
+    def on_modified(self, event):
+        valid, return_code, proc = super(ConsoleHandler, self).on_modified(event)
+        if not valid:
+            return valid, 0, None
+        if return_code:
+            quote = colored.red('||')
+        else:
+            quote = colored.green('||')
+        with indent(4, quote=quote):
+            puts(proc.stderr.read())
+            puts(proc.stdout.read())
+        return valid, return_code, proc
+
+
+class MacNotifyHandler(ConsoleHandler):
+
+    def on_modified(self, event):
+        valid, return_code, proc = super(MacNotifyHandler, self).on_modified(event)
+        if not valid:
+            return valid, 0, None
+        try:
+            from pync import Notifier
+        except ImportError:
+            puts(colored.red('Module pync not found, use: pip install pync'))
+            return valid, return_code, proc
+        if return_code:
+            Notifier.notify('Error!', title="EasyDojo[{name}]".format(name=self.name))
+        else:
+            Notifier.notify('Success!', title="EasyDojo[{name}]".format(name=self.name))
+        return valid, return_code, proc
+
+
 
 
 class EasyDojo(object):
