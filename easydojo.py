@@ -124,5 +124,5 @@ class EasyDojo(object):
 
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='Easy Dojo')
+    arguments = docopt(__doc__, version='EasyDojo 0.1')
     dojo = EasyDojo(arguments)
