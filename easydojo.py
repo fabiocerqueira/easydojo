@@ -5,6 +5,7 @@
 Usage:
   easydojo.py create <name>
   easydojo.py watch <name> [--handler=<handle>]
+  easydojo.py list
   easydojo.py (-h | --help)
   easydojo.py --version
 
@@ -58,6 +59,8 @@ class DojoCommand(object):
             return CreateCommand('create', config)
         elif arguments['watch']:
             return WatchCommand('watch', config)
+        elif arguments['list']:
+            return ListHandlerCommand('list', config)
 
 
 class CreateCommand(DojoCommand):
@@ -74,6 +77,15 @@ class CreateCommand(DojoCommand):
         open(os.path.join(name, '{name}.py'.format(name=name)), 'w').close()
         puts('Creating dojo test file {name}/test_{name}.py'.format(name=name))
         open(os.path.join(name, 'test_{name}.py'.format(name=name)), 'w').close()
+
+
+class ListHandlerCommand(DojoCommand):
+    def run(self):
+        puts('List of all handlers:')
+        for v in globals():
+            if v.endswith('Handler') and issubclass(globals()[v], DojoEventHandler):
+                with indent(4):
+                    puts("{0} - {1}".format(v, globals()[v].__doc__))
 
 
 class WatchCommand(DojoCommand):
@@ -100,6 +112,7 @@ class WatchCommand(DojoCommand):
 
 
 class DojoEventHandler(FileSystemEventHandler):
+    """ Displays only the file that is being changed """
 
     def __init__(self, name, *args, **kwargs):
         self.name = name
@@ -122,6 +135,7 @@ class DojoEventHandler(FileSystemEventHandler):
 
 
 class ConsoleHandler(DojoEventHandler):
+    """ Displays tests results on console, It's default. """
 
     def on_modified(self, event):
         valid, return_code, proc = super(ConsoleHandler, self).on_modified(event)
@@ -138,6 +152,7 @@ class ConsoleHandler(DojoEventHandler):
 
 
 class MacNotifyHandler(ConsoleHandler):
+    """ Displays tests results on console and a Mac Desktop notification """
 
     def on_modified(self, event):
         valid, return_code, proc = super(MacNotifyHandler, self).on_modified(event)
@@ -153,8 +168,6 @@ class MacNotifyHandler(ConsoleHandler):
         else:
             Notifier.notify('Success!', title="EasyDojo[{name}]".format(name=self.name))
         return valid, return_code, proc
-
-
 
 
 class EasyDojo(object):
