@@ -1,7 +1,7 @@
 from clint.textui import puts, colored, indent
 from watchdog.events import FileSystemEventHandler
 
-from utils import slugify
+from easydojo.utils import slugify
 
 import subprocess
 import os
