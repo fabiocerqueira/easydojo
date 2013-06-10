@@ -1,9 +1,14 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import os
+import sys
 from setuptools import setup, find_packages
 
 import easydojo
+
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist upload')
+    sys.exit()
 
 setup(
     name='easydojo',
