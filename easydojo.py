@@ -85,7 +85,7 @@ class ListHandlerCommand(DojoCommand):
         for v in globals():
             if v.endswith('Handler') and issubclass(globals()[v], DojoEventHandler):
                 with indent(4):
-                    puts("{0} - {1}".format(v, globals()[v].__doc__))
+                    puts("{0} - {1}".format(v.replace('Handler', ''), globals()[v].__doc__))
 
 
 class WatchCommand(DojoCommand):
@@ -98,7 +98,7 @@ class WatchCommand(DojoCommand):
                 handler = globals()['{handler}Handler'.format(handler=self.config['handler'])]
             except KeyError:
                 puts(colored.red('Handler "{0}" not found!'.format(self.config['handler'])))
-                puts('Running with Console handler...')
+        puts('Running with {0} handler...'.format(handler.__name__.replace('Handler', '')))
         event_handler = handler(name=self.name)
         observer = Observer()
         observer.schedule(event_handler, path, recursive=True)
