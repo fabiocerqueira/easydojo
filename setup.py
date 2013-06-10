@@ -29,7 +29,7 @@ setup(
     include_package_data=True,
     package_data={'': ['LICENSE']},
     license=open('LICENSE').read(),
-    scripts=['easydojo/easy_dojo'],
+    scripts=['easy_dojo'],
     classifiers=[
         "Environment :: Console",
         "Intended Audience :: Education",

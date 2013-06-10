@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+"""Easy Dojo
+
+Usage:
+  easy_dojo create <name>
+  easy_dojo watch <name> [--handler=<handle>]
+  easy_dojo list
+  easy_dojo (-h | --help)
+  easy_dojo --version
+
+Options:
+  --handler=<handle>     Handler used on watch command
+  -h --help     Show this screen.
+  --version     Show version.
+
+"""
+from docopt import docopt
+
+from easydojo import __title__, __version__
+from easydojo.commands import DojoCommand
+
+
+if __name__ == '__main__':
+    arguments = docopt(__doc__, version='{0} {1}'.format(__title__, __version__))
+    command = DojoCommand.make(arguments)
+    command.run()
