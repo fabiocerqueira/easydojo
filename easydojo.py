@@ -27,6 +27,12 @@ import re
 import sys
 import subprocess
 
+__title__ = 'easydojo'
+__version__ = '0.1'
+__author__ = 'Fábio Cerqueira'
+__license__ = 'Apache 2.0'
+__copyright__ = 'Copyright 2013 Fábio Cerqueira'
+
 
 def slugify(value):
     """
@@ -177,5 +183,5 @@ class EasyDojo(object):
 
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='EasyDojo 0.1')
+    arguments = docopt(__doc__, version='{0} {1}'.format(__title__, __version__))
     dojo = EasyDojo(arguments)

@@ -3,3 +3,6 @@
 *.DS_Store
 htmlcov
 .coverage
+build
+dist
+easydojo.egg-info
