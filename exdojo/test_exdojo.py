@@ -2,6 +2,7 @@ import unittest
 
 from exdojo import factorial
 
+
 class TestFactorial(unittest.TestCase):
 
     def test_factorial_0(self):
