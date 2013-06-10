@@ -1,16 +1,16 @@
 clean:
-		@find . -name "*.pyc" -delete
+	@find . -name "*.pyc" -delete
 
 deps:
-		@pip install -r requirements.txt
+	@pip install -r requirements.txt
 
 flake8:
-		@flake8 . --ignore=E124,E128
+	@flake8 . --ignore=E124,E128
 
 test:
-	coverage erase
-	coverage run  --source=easydojo.py test.py
-	coverage html
+	@coverage erase
+	@coverage run  --source=easydojo.py test.py
+	@coverage html
 
 help:
-		grep '^[^#[:space:]].*:' Makefile | awk -F ":" '{print $$1}'
+	@grep '^[^#[:space:]].*:' Makefile | awk -F ":" '{print $$1}'
