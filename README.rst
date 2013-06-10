@@ -1,4 +1,3 @@
-
 EasyDojo
 ========
 
@@ -7,6 +6,19 @@ Simple tools developed to help in Coding Dojo sessions
 Install and use
 ---------------
 
+Install ::
+
+    pip install -e git://github.com/fabiocerqueira/easydojo.git#egg=easydojo
+
+Use ::
+
+    easy_dojo --help
+    
+Contributing
+------------
+
+Your contributions are welcome! ::
+
 Get the code ::
 
     git clone git://github.com/fabiocerqueira/easydojo.git
@@ -14,16 +26,9 @@ Get the code ::
 Install dependencies ::
 
     pip install -r requirements.txt
-
-Use ::
-
-    python easydojo.py --help
-    
-Contributing
-------------
-
-Your contributions are welcome! ::
-
     pip install coverage
+    
+Run tests ::
+
     make test
 
