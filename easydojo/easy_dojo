@@ -20,18 +20,14 @@ from clint.textui import puts, colored, indent
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+from easydojo import __title__, __version__
+
 import os
 import time
 import unicodedata
 import re
 import sys
 import subprocess
-
-__title__ = 'easydojo'
-__version__ = '0.1'
-__author__ = 'Fábio Cerqueira'
-__license__ = 'Apache 2.0'
-__copyright__ = 'Copyright 2013 Fábio Cerqueira'
 
 
 def slugify(value):
