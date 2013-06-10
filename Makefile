@@ -9,7 +9,7 @@ flake8:
 
 test:
 	@coverage erase
-	@coverage run  --source=easydojo.py test.py
+	@coverage run  --source=easydojo test.py
 	@coverage html
 
 help:
