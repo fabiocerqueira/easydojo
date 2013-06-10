@@ -3,11 +3,11 @@
 """Easy Dojo
 
 Usage:
-  easydojo.py create <name>
-  easydojo.py watch <name> [--handler=<handle>]
-  easydojo.py list
-  easydojo.py (-h | --help)
-  easydojo.py --version
+  easy_dojo create <name>
+  easy_dojo watch <name> [--handler=<handle>]
+  easy_dojo list
+  easy_dojo (-h | --help)
+  easy_dojo --version
 
 Options:
   --handler=<handle>     Handler used on watch command
