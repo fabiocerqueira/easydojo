@@ -17,3 +17,12 @@ Install dependencies ::
 Use ::
 
     python easydojo.py --help
+    
+Contributing
+------------
+
+Your contributions are welcome! ::
+
+    pip install coverage
+    make test
+
