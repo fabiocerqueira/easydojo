@@ -1,7 +1,7 @@
 EasyDojo
 ========
 
-Simple tools developed to help in Coding Dojo sessions 
+Simple tools developed to help in Coding Dojo sessions
 
 Install and use
 ---------------
@@ -13,7 +13,7 @@ Install ::
 Use ::
 
     easy_dojo --help
-    
+
 Contributing
 ------------
 
@@ -26,8 +26,7 @@ Get the code ::
 Install dependencies ::
 
     pip install -r requirements.txt
-    pip install coverage
-    
+
 Run tests ::
 
     make test
