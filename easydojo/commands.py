@@ -29,6 +29,7 @@ class DojoCommand(object):
             handler_list = []
         config = {
             'name': arguments['<name>'],
+            'args': arguments['<args>'],
             'handler': handler_list,
         }
         if arguments['init']:
@@ -72,11 +73,11 @@ class ListHandlerCommand(DojoCommand):
         puts('List of all handlers:')
         for v in vars(handlers):
             if (v.endswith('Handler') and
-                getattr(handlers, v) is not handlers.BaseHandler and
-                getattr(handlers, v) is not handlers.ConsoleHandler and
-                issubclass(getattr(handlers, v), handlers.BaseHandler)):
+                    getattr(handlers, v) is not handlers.BaseHandler and
+                    getattr(handlers, v) is not handlers.ConsoleHandler and
+                    issubclass(getattr(handlers, v), handlers.BaseHandler)):
                 with indent(4):
-                    puts("{0} - {1}".format(v.replace('Handler', ''), getattr(handlers, v).__doc__))
+                    puts("* {0} - {1}\n".format(v.replace('Handler', ''), getattr(handlers, v).__doc__))
 
 
 class WatchCommand(DojoCommand):
@@ -88,7 +89,7 @@ class WatchCommand(DojoCommand):
             with indent(4):
                 puts("easy_dojo init <name>")
             sys.exit(1)
-        event_handler = handlers.DojoEventHandler(self.config['handler'])
+        event_handler = handlers.DojoEventHandler(self.config)
         observer = Observer()
         observer.schedule(event_handler, os.getcwd(), recursive=True)
         observer.start()

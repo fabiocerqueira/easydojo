@@ -6,7 +6,7 @@ Simple tool to help in Coding Dojo sessions
 
 Usage:
   easy_dojo init <name>
-  easy_dojo watch [--handlers=<handlers>]
+  easy_dojo watch [--handlers=<handlers>] [<args>...]
   easy_dojo list
   easy_dojo (-h | --help)
   easy_dojo --version
