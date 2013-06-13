@@ -22,6 +22,7 @@ setup(
         'clint>=0.3',
         'docopt>=0.6',
         'watchdog>=0.6',
+        'PyYAML>=3.10',
     ],
     description = 'Simple tools developed to help in Coding Dojo sessions',
     long_description=open('README.rst').read(),

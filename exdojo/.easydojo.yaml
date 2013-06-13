@@ -1,0 +1,5 @@
+version: 0.3
+files:
+    - exdojo.py
+    - test_exdojo.py
+test_runner: python -m unittest test_exdojo

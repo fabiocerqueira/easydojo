@@ -5,8 +5,8 @@
 Simple tool to help in Coding Dojo sessions
 
 Usage:
-  easy_dojo create <name>
-  easy_dojo watch <name> [--handler=<handle>]
+  easy_dojo init <name>
+  easy_dojo watch [--handler=<handle>]
   easy_dojo list
   easy_dojo (-h | --help)
   easy_dojo --version

@@ -1,0 +1,5 @@
+version: {version}
+files:
+    - {filename}
+    - {test_filename}
+test_runner: python -m unittest {test}

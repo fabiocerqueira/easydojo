@@ -1,7 +1,6 @@
 from clint.textui import puts, colored, indent
 from watchdog.events import FileSystemEventHandler
-
-from easydojo.utils import slugify
+import yaml
 
 import subprocess
 import os
@@ -10,24 +9,24 @@ import os
 class DojoEventHandler(FileSystemEventHandler):
     """ Displays only the file that is being changed """
 
-    def __init__(self, name, *args, **kwargs):
-        self.name = name
-        super(FileSystemEventHandler, self).__init__(*args, **kwargs)
-
     def on_modified(self, event):
-        name = slugify(self.name)
-        filename = os.path.basename(event.src_path)
         valid = False
-        if filename.endswith('%s.py' % name):
-            valid = True
-            puts('Modified file {name}'.format(name=filename))
-            puts('Running tests...')
-            cmd = ['python', '-m', 'unittest', 'discover', name, 'test_{name}.py'.format(name=name)]
-            proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            return_code = proc.wait()
-            return valid, return_code, proc
-        else:
+        if event.is_directory:
             return valid, 0, None
+        filename = os.path.basename(event.src_path)
+        config_file = os.path.join(os.getcwd(), '.easydojo.yaml')
+        with open(config_file) as stream:
+            config = yaml.load(stream)
+        if filename not in config['files']:
+            return valid, 0, None
+        valid = True
+        puts('Modified file {name}'.format(name=filename))
+        puts('Running test runner:')
+        puts(config['test_runner'])
+        cmd = config['test_runner'].split()
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return_code = proc.wait()
+        return valid, return_code, proc
 
 
 class ConsoleHandler(DojoEventHandler):
@@ -60,7 +59,8 @@ class MacNotifyHandler(ConsoleHandler):
             puts(colored.red('Module pync not found, use: pip install pync'))
             return valid, return_code, proc
         if return_code:
-            Notifier.notify('Error!', title="EasyDojo[{name}]".format(name=self.name))
+            message = 'Error!'
         else:
-            Notifier.notify('Success!', title="EasyDojo[{name}]".format(name=self.name))
+            message = "Success!"
+        Notifier.notify(message, title="EasyDojo")
         return valid, return_code, proc
