@@ -2,8 +2,8 @@
 from clint.textui import puts, colored, indent
 from watchdog.observers import Observer
 
+from easydojo import __version__, handlers
 from easydojo.utils import slugify
-from easydojo import handlers, __version__
 
 import os
 import time
@@ -23,9 +23,13 @@ class DojoCommand(object):
 
     @staticmethod
     def make(arguments):
+        if arguments['--handlers']:
+            handler_list = [h.strip() for h in arguments['--handlers'].split(',')]
+        else:
+            handler_list = []
         config = {
             'name': arguments['<name>'],
-            'handler': arguments['--handler'],
+            'handler': handler_list,
         }
         if arguments['init']:
             return InitCommand('init', config)
@@ -67,7 +71,10 @@ class ListHandlerCommand(DojoCommand):
     def run(self):
         puts('List of all handlers:')
         for v in vars(handlers):
-            if v.endswith('Handler') and issubclass(getattr(handlers, v), handlers.DojoEventHandler):
+            if (v.endswith('Handler') and
+                getattr(handlers, v) is not handlers.BaseHandler and
+                getattr(handlers, v) is not handlers.ConsoleHandler and
+                issubclass(getattr(handlers, v), handlers.BaseHandler)):
                 with indent(4):
                     puts("{0} - {1}".format(v.replace('Handler', ''), getattr(handlers, v).__doc__))
 
@@ -81,14 +88,7 @@ class WatchCommand(DojoCommand):
             with indent(4):
                 puts("easy_dojo init <name>")
             sys.exit(1)
-        handler = handlers.ConsoleHandler
-        if self.config['handler']:
-            try:
-                handler = getattr(handlers, '{handler}Handler'.format(handler=self.config['handler']))
-            except KeyError:
-                puts(colored.red('Handler "{0}" not found!'.format(self.config['handler'])))
-        puts('Running with {0} handler...'.format(handler.__name__.replace('Handler', '')))
-        event_handler = handler()
+        event_handler = handlers.DojoEventHandler(self.config['handler'])
         observer = Observer()
         observer.schedule(event_handler, os.getcwd(), recursive=True)
         observer.start()

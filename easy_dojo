@@ -6,13 +6,13 @@ Simple tool to help in Coding Dojo sessions
 
 Usage:
   easy_dojo init <name>
-  easy_dojo watch [--handler=<handle>]
+  easy_dojo watch [--handlers=<handlers>]
   easy_dojo list
   easy_dojo (-h | --help)
   easy_dojo --version
 
 Options:
-  --handler=<handle>     Handler used on watch command
+  --handlers=<handlers>     Handlers used on watch command(separated by commas)
   -h --help     Show this screen.
   --version     Show version.
 
