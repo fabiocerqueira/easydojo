@@ -67,17 +67,20 @@ class ConsoleHandler(BaseHandler):
 class MacNotifyHandler(BaseHandler):
     """ Displays tests results on console and a Mac Desktop notification """
 
-    def execute(self, event, return_code, proc):
+    def __init__(self):
         try:
             from pync import Notifier
         except ImportError:
             puts(colored.red('Module pync not found, use: pip install pync'))
             sys.exit(1)
+        self.notifier = Notifier
+
+    def execute(self, event, return_code, proc):
         if return_code:
             message = 'Error!'
         else:
             message = "Success!"
-        Notifier.notify(message, title="EasyDojo")
+        self.notifier.notify(message, title="EasyDojo")
         return super(MacNotifyHandler, self).execute(event, return_code, proc)
 
 
