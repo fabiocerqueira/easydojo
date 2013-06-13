@@ -4,6 +4,8 @@ import yaml
 
 import subprocess
 import os
+import glob
+import sys
 
 
 class DojoEventHandler(FileSystemEventHandler):
@@ -64,3 +66,36 @@ class MacNotifyHandler(ConsoleHandler):
             message = "Success!"
         Notifier.notify(message, title="EasyDojo")
         return valid, return_code, proc
+
+
+class ArduinoHandler(ConsoleHandler):
+    """ Send a serial command to arduino with tests results """
+
+    def __init__(self, *args, **kwargs):
+        super(ArduinoHandler, self).__init__(*args, **kwargs)
+        try:
+            import serial
+        except ImportError:
+            puts(colored.red('Module pyserial not found, use: pip install pyserial'))
+            sys.exit(1)
+        try:
+            arduino_path = (glob.glob('/dev/ttyUSB*') + glob.glob('/dev/tty.usb*'))[0]
+        except IndexError:
+            puts(colored.red('Could not find an arduino device'))
+            sys.exit(1)
+        self.arduino = serial.Serial(arduino_path, 9600)
+
+    def on_modified(self, event):
+        valid, return_code, proc = super(ArduinoHandler, self).on_modified(event)
+        if not valid:
+            return valid, 0, None
+        if return_code:
+            message = 'E'
+        else:
+            message = "S"
+        self.arduino.write(message)
+        return valid, return_code, proc
+
+    def __del__(self):
+        if hasattr(self, 'arduino'):
+            self.arduino.close()
