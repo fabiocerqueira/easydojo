@@ -13,7 +13,7 @@ try:
     import tornado.options
     import tornado.websocket
 except ImportError:
-    puts(colored.red('Modulet tornado not found, use: pip install tornado'))
+    puts(colored.red('Module tornado not found, use: pip install tornado'))
     sys.exit(1)
 
 server = None

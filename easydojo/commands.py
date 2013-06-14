@@ -4,7 +4,6 @@ from watchdog.observers import Observer
 
 from easydojo import __version__, handlers
 from easydojo.utils import slugify
-from easydojo.panel import server
 
 import os
 import time
@@ -74,6 +73,7 @@ class InitCommand(DojoCommand):
 
 class PanelCommand(DojoCommand):
     def run(self):
+        from easydojo.panel import server
         try:
             if self.config['port']:
                 server.main(int(self.config['port']))
