@@ -4,6 +4,7 @@ from watchdog.observers import Observer
 
 from easydojo import __version__, handlers
 from easydojo.utils import slugify
+from easydojo.panel import server
 
 import os
 import time
@@ -31,11 +32,14 @@ class DojoCommand(object):
             'name': arguments['<name>'],
             'args': arguments['<args>'],
             'handler': handler_list,
+            'port': arguments['<port>'],
         }
         if arguments['init']:
             return InitCommand('init', config)
         elif arguments['watch']:
             return WatchCommand('watch', config)
+        elif arguments['panel']:
+            return PanelCommand('panel', config)
         elif arguments['list']:
             return ListHandlerCommand('list', config)
 
@@ -66,6 +70,18 @@ class InitCommand(DojoCommand):
                 f.write(config_template.format(**config))
             open(filename, 'w').close()
             open(test_filename, 'w').close()
+
+
+class PanelCommand(DojoCommand):
+    def run(self):
+        try:
+            if self.config['port']:
+                server.main(int(self.config['port']))
+            else:
+                server.main()
+        except ValueError:
+            puts(colored.red('Port must be a integer'))
+            sys.exit(1)
 
 
 class ListHandlerCommand(DojoCommand):
