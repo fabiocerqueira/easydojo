@@ -111,3 +111,32 @@ class ArduinoHandler(BaseHandler):
     def __del__(self):
         if hasattr(self, 'arduino'):
             self.arduino.close()
+
+
+class UbuntuNotifyHandler(BaseHandler):
+    """ Displays tests results on console and a Ubuntu Desktop notification """
+
+    def __init__(self):
+        try:
+            import pynotify
+        except ImportError:
+            puts(colored.red('Package pynotify not found, use: sudo apt-get install python-notify'))
+            sys.exit(1)
+
+        if not pynotify.init("icon-summary-body"):
+            sys.exit(1)
+        self.notifier = pynotify
+
+    def execute(self, event, return_code, proc):
+        if return_code:
+            message = 'Error!'
+        else:
+            message = 'Success!'
+
+        self.notifier.Notification(
+            "EasyDojo",
+            message,
+            "notification-message-im")
+
+        self.notifier.show()
+        return super(UbuntuNotifyHandler, self).execute(event, return_code, proc)
