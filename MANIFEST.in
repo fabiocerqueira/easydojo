@@ -1,1 +1,6 @@
+include LICENSE
+include README.rst
+include arduino_handler.pde
+include easydojo/panel/templates *
+include easydojo/panel/static *
 include easydojo/sample_easydojo.yaml
