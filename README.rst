@@ -31,6 +31,29 @@ Use ::
         -h --help     Show this screen.
         --version     Show version.
 
+Handlers
+--------
+
+::
+
+    $ easy_dojo list
+    List of all handlers:
+        * Arduino -  Send a serial command to arduino with tests results 
+        
+        * MacNotify -  Displays tests results on console and a Mac Desktop notification 
+        
+        * WebSocket -  Send tests results via WebSocket.
+                    args:
+                        <url> - url to websocket server
+                    example: easy_dojo watch --handler=WebSocket ws://localhost:2020/ws
+            
+        
+        * Socket -  Send a network command via socket with tests results.
+                    args:
+                        <host> - host of server
+                        <port> - port used on server
+                    example: easy_dojo watch --handler=Socket localhost 2020
+
 Contributing
 ------------
 
