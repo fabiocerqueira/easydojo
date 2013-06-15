@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var ws = new WebSocket("ws://localhost:2020/ws");
+    var ws = new WebSocket("ws://" + document.location.host + "/ws");
     ws.onmessage = function(evt) {
         if (evt.data == 'S') {
             $('#red').attr('class', 'off');

@@ -196,10 +196,8 @@ class SocketHandler(BaseHandler):
 class WebSocketHandler(BaseHandler):
     """ Send tests results via WebSocket.
             args:
-                <host> - host of server
-                <port> - port used on server
-                <uri> - path to WebSocket
-            example: easy_dojo watch --handler=WebSocket localhost 2020 ws
+                <url> - url to websocket server
+            example: easy_dojo watch --handler=WebSocket ws://localhost:2020/ws
     """
 
     def __init__(self, args):
@@ -209,23 +207,20 @@ class WebSocketHandler(BaseHandler):
         except ImportError:
             puts(colored.red('Module websocket-client not found, use: pip install websocket-client'))
             sys.exit(1)
-        if len(args) != 3:
-            puts(colored.red('Args must be <host> <port> <uri>'))
+        if len(args) != 1:
+            puts(colored.red('Args must be <url>'))
             puts('Example:')
             with indent(4):
-                puts('easy_dojo watch --handler=WebSocket localhost 2020 ws')
+                puts('easy_dojo watch --handler=WebSocket ws://localhost:2020/ws')
             sys.exit(1)
-        self.host = args[0]
-        self.uri = args[2]
+        self.url = args[0]
         try:
-            self.port = int(args[1])
-        except ValueError:
-            puts(colored.red('Port must be a integer'))
-            sys.exit(1)
-        try:
-            self.ws = websocket.create_connection("ws://{0}:{1}/{2}".format(self.host, self.port, self.uri))
+            self.ws = websocket.create_connection(self.url)
         except (websocket.WebSocketException, socket.error):
-            puts(colored.red('Could not connect to server: ws://{0}:{1}/{2}'.format(self.host, self.port, self.uri)))
+            puts(colored.red('Could not connect to server: {0}'.format(self.url)))
+            sys.exit(1)
+        except ValueError:
+            puts(colored.red('"{0}" is an invalid url'.format(self.url)))
             sys.exit(1)
 
     def execute(self, event, return_code, proc):
@@ -237,7 +232,7 @@ class WebSocketHandler(BaseHandler):
         try:
             self.ws.send(message)
         except (websocket.WebSocketException, socket.error):
-            puts(colored.red('Unable to communicate with server: ws://{0}:{1}/{2}'.format(self.host, self.port, self.uri)))
+            puts(colored.red('Unable to communicate with server: {0}'.format(self.url)))
         return super(WebSocketHandler, self).execute(event, return_code, proc)
 
     def __del__(self):
