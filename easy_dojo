@@ -6,13 +6,15 @@ Simple tool to help in Coding Dojo sessions
 
 Usage:
   easy_dojo init <name>
-  easy_dojo watch [--handlers=<handlers>]
+  easy_dojo watch [--handlers=<handlers>] [<args>...]
+  easy_dojo panel [<port>]
   easy_dojo list
   easy_dojo (-h | --help)
   easy_dojo --version
 
 Options:
   --handlers=<handlers>     Handlers used on watch command(separated by commas)
+  port    Port used on tornado server of EasyDojo Panel(default=2020)
   -h --help     Show this screen.
   --version     Show version.
 
