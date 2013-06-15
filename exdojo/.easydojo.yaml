@@ -1,4 +1,4 @@
-version: 0.6.3
+version: 0.7
 files:
     - exdojo.py
     - test_exdojo.py

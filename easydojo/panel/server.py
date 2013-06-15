@@ -31,14 +31,17 @@ class MainHandler(tornado.web.RequestHandler):
 
 class WSHandler(tornado.websocket.WebSocketHandler):
     def open(self):
+        logging.info('[ws] connected: {0}'.format(self.request.remote_ip))
         SOCKETS.append(self)
 
     def on_message(self, message):
+        logging.info('[ws] message received: {0}'.format(message))
         for socket in SOCKETS:
             if socket is not self:
                 socket.write_message(message)
 
     def on_close(self):
+        logging.info('[ws] disconnected: {0}'.format(self.request.remote_ip))
         SOCKETS.remove(self)
 
 
