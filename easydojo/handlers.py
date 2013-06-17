@@ -120,6 +120,30 @@ class ArduinoHandler(BaseHandler):
             self.arduino.close()
 
 
+class UbuntuNotifyHandler(BaseHandler):
+    """ Displays tests results on console and a Ubuntu Desktop notification """
+
+    def __init__(self, args):
+        super(UbuntuNotifyHandler, self).__init__(args)
+        try:
+            subprocess.check_call(['notify-send', '']) 
+        except subprocess.CalledProcessError:
+            pass
+        except OSError:
+            puts(colored.red('Package notify-send not installed. Please use: sudo apt-get install notify-osd'))
+            sys.exit(1)
+            
+    def execute(self, event, return_code, proc):
+        if return_code:
+            message = 'Error!'
+        else:
+            message = 'Success!'
+
+        subprocess.call(['notify-send', 'UbuntuNotify', message])
+
+        return super(UbuntuNotifyHandler, self).execute(event, return_code, proc)
+
+
 class SocketHandler(BaseHandler):
     """ Send a network command via socket with tests results.
             args:
