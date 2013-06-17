@@ -40,6 +40,8 @@ Handlers
     List of all handlers:
         * Arduino -  Send a serial command to arduino with tests results 
         
+        * UbuntuNotify -  Displays tests results on console and a Ubuntu Desktop notification 
+        
         * MacNotify -  Displays tests results on console and a Mac Desktop notification 
         
         * WebSocket -  Send tests results via WebSocket.
