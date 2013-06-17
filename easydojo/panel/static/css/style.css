@@ -1,9 +1,44 @@
+.cntSeparator {
+    font-size: 54px;
+    margin: 10px 7px;
+    color: #000;
+}
 .red {
-    background-color: #F00;
+    background: #ff3019; /* Old browsers */
+    border:2px solid #ff3019;
+    background: -moz-linear-gradient(top, #ff3019 0%, #cf0404 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff3019), color-stop(100%,#cf0404)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ff3019 0%,#cf0404 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3019', endColorstr='#cf0404',GradientType=0 ); /* IE6-9 */
 }
 .green {
-    background-color: #0F0;
+    background: #25c413; /* Old browsers */
+    border:2px solid #25c413;
+    background: -moz-linear-gradient(top,  #25c413 0%, #075901 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#25c413), color-stop(100%,#075901)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #25c413 0%,#075901 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #25c413 0%,#075901 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #25c413 0%,#075901 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #25c413 0%,#075901 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#25c413', endColorstr='#075901',GradientType=0 ); /* IE6-9 */
 }
 .off {
-    background-color: #000;
+    border:2px solid #000;
+}
+#signal {
+    margin-top:40px;
+    margin-left:auto;
+    margin-right:auto;
+    border-radius: 50%;
+    width: 400px;
+    height: 400px;
+}
+#counter {
+    position: fixed;
+    margin-top:40px;
+    margin-left: -127px;
+    left:50%;
 }
