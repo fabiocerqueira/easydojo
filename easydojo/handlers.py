@@ -94,7 +94,7 @@ class ArduinoHandler(BaseHandler):
     """ Send a serial command to arduino with tests results """
 
     def __init__(self, args):
-        super(MacNotifyHandler, self).__init__(args)
+        super(ArduinoHandler, self).__init__(args)
         try:
             import serial
         except ImportError:
@@ -126,13 +126,13 @@ class UbuntuNotifyHandler(BaseHandler):
     def __init__(self, args):
         super(UbuntuNotifyHandler, self).__init__(args)
         try:
-            subprocess.check_call(['notify-send', '']) 
+            subprocess.check_call(['notify-send', ''])
         except subprocess.CalledProcessError:
             pass
         except OSError:
             puts(colored.red('Package notify-send not installed. Please use: sudo apt-get install notify-osd'))
             sys.exit(1)
-            
+
     def execute(self, event, return_code, proc):
         if return_code:
             message = 'Error!'
