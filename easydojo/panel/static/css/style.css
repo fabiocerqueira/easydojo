@@ -36,9 +36,12 @@
     width: 400px;
     height: 400px;
 }
-#counter {
+#countdown {
     position: fixed;
-    margin-top:40px;
-    margin-left: -127px;
+    margin-top:20px;
+    margin-left: -130px;
     left:50%;
+    font-size: 115px;
+    text-shadow: 3px 3px 10px #4d4d4d;
+    filter: dropshadow(color=#4d4d4d, offx=1, offy=1);
 }
