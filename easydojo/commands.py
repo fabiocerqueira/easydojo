@@ -49,11 +49,11 @@ class InitCommand(DojoCommand):
         name = slugify(self.name)
         filename = "{0}.py".format(name)
         test_filename = "test_{0}.py".format(name)
-        if os.listdir(os.getcwd()):
-            puts(colored.red("This dir isn't empty"))
-            sys.exit(1)
         if os.path.exists(self.dojo_file):
             puts(colored.red('EasyDojo already exists'))
+            sys.exit(1)
+        elif os.listdir(os.getcwd()):
+            puts(colored.red("This dir isn't empty"))
             sys.exit(1)
         else:
             puts('Initialize {name}'.format(name=name))
