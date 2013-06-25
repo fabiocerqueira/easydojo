@@ -26,6 +26,7 @@ STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 FORMAT = "[%(asctime)-15s] - %(message)s"
 logging.basicConfig(format=FORMAT)
 
+
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render('index.html')
